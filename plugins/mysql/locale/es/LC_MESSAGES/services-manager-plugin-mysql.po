@@ -1,0 +1,38 @@
+# Spanish translations for PACKAGE package.
+# Copyright (C) 2013 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Carlos Cesar Caballero Díaz <ccesar@linuxmail.org>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-22 12:03-0500\n"
+"PO-Revision-Date: 2013-02-22 12:04-0500\n"
+"Last-Translator: Carlos Cesar Caballero Diaz <ccesar@linuxmail.org>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: __init__.py:32
+msgid "Mysql is running"
+msgstr "Mysql esta iniciado"
+
+#: __init__.py:33
+msgid "Mysql is not running"
+msgstr "Mysql esta detenido"
+
+#: __init__.py:34
+msgid "Turn Off Mysql"
+msgstr "Detener Mysql"
+
+#: __init__.py:35
+msgid "Turn On Mysql"
+msgstr "Iniciar Mysql"
+
+#: __init__.py:36
+msgid "Restart Mysql"
+msgstr "Reiniciar Mysql"
