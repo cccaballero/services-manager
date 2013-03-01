@@ -145,7 +145,7 @@ class manager:
         """Show the Abaut dialog"""
         about = gtk.AboutDialog()
         about.set_name("services-manager")
-        about.set_version("0.1")
+        about.set_version("0.2")
         about.set_comments(ABAUT_COMMENTS)
         about.set_license("GPL v3")
         #about.set_website("")
