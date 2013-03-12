@@ -1,7 +1,9 @@
 services-manager
 ================
 
-Control tool for services
+<b>Control tool for services</b>
+
+![services-manager snapshoot](http://s21.postimage.org/hump3izlj/image.png)
 
 Is an application that allows control services such as Apache and MySQL from the system notification area, the purpose of it is to achieve similar functionality to the control panel of XAMPP in the Linux desktop.
 
