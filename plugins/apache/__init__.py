@@ -97,7 +97,7 @@ class apache_plugin:
 
     def add_mods_menu(self):
         imenu = gtk.Menu()
-        mods_menu = gtk.MenuItem("Módulos")
+        mods_menu = gtk.MenuItem(_("Modules"))
         mods_menu.set_submenu(imenu)
 
         for module in self.get_mods_available():
