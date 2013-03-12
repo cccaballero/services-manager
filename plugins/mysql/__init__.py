@@ -46,35 +46,37 @@ class mysql_plugin:
         self.widget = widget
 
     def show_mysql(self):
-    	if self.is_mysql_installed():
-	        if self.is_mysql_running():
-	            self.widget.tray_menu.append(gtk.SeparatorMenuItem())
+        if self.is_mysql_installed():
+            if self.is_mysql_running():
+                self.widget.tray_menu.append(gtk.SeparatorMenuItem())
 
-	            image = gtk.Image()
-	            image.set_from_file(self.widget.image_green)
-	            self.widget.menu_mysql = gtk.ImageMenuItem(MYSQL_RUNNING_MESSAGE)
-	            self.widget.menu_mysql.set_image(image)
-	            self.widget.tray_menu.append(self.widget.menu_mysql)
+                image = gtk.Image()
+                #image.set_from_file(self.widget.image_green)
+                image.set_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
+                self.widget.menu_mysql = gtk.ImageMenuItem(MYSQL_RUNNING_MESSAGE)
+                self.widget.menu_mysql.set_image(image)
+                self.widget.tray_menu.append(self.widget.menu_mysql)
 
-	            self.widget.menu_mysql_off = gtk.ImageMenuItem(MYSQL_TURN_OFF_MESSAGE)
-	            self.widget.menu_mysql_off.connect("activate", self.mysql_off)
-	            self.widget.tray_menu.append(self.widget.menu_mysql_off)
+                self.widget.menu_mysql_off = gtk.ImageMenuItem(MYSQL_TURN_OFF_MESSAGE)
+                self.widget.menu_mysql_off.connect("activate", self.mysql_off)
+                self.widget.tray_menu.append(self.widget.menu_mysql_off)
 
-	            self.widget.menu_mysql_restart = gtk.ImageMenuItem(MYSQL_RESTART_MESSAGE)
-	            self.widget.menu_mysql_restart.connect("activate", self.mysql_restart)
-	            self.widget.tray_menu.append(self.widget.menu_mysql_restart)
-	        else:
-	            self.widget.tray_menu.append(gtk.SeparatorMenuItem())
+                self.widget.menu_mysql_restart = gtk.ImageMenuItem(MYSQL_RESTART_MESSAGE)
+                self.widget.menu_mysql_restart.connect("activate", self.mysql_restart)
+                self.widget.tray_menu.append(self.widget.menu_mysql_restart)
+            else:
+                self.widget.tray_menu.append(gtk.SeparatorMenuItem())
 
-	            image = gtk.Image()
-	            image.set_from_file(self.widget.image_red)
-	            self.widget.menu_mysql = gtk.ImageMenuItem(MYSQL_STOPPED_MESSAGE)
-	            self.widget.menu_mysql.set_image(image)
-	            self.widget.tray_menu.append(self.widget.menu_mysql)
+                image = gtk.Image()
+                #image.set_from_file(self.widget.image_red)
+                image.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
+                self.widget.menu_mysql = gtk.ImageMenuItem(MYSQL_STOPPED_MESSAGE)
+                self.widget.menu_mysql.set_image(image)
+                self.widget.tray_menu.append(self.widget.menu_mysql)
 
-	            self.widget.menu_mysql_on = gtk.ImageMenuItem(MYSQL_TURN_ON_MESSAGE)
-	            self.widget.menu_mysql_on.connect("activate", self.mysql_on)
-	            self.widget.tray_menu.append(self.widget.menu_mysql_on)
+                self.widget.menu_mysql_on = gtk.ImageMenuItem(MYSQL_TURN_ON_MESSAGE)
+                self.widget.menu_mysql_on.connect("activate", self.mysql_on)
+                self.widget.tray_menu.append(self.widget.menu_mysql_on)
 
     def is_mysql_installed(self, *args ):
         output = commands.getoutput("which mysqld")

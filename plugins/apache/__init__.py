@@ -36,6 +36,7 @@ APACHE_TURN_OFF_MESSAGE = _('Turn Off Apache')
 APACHE_TURN_ON_MESSAGE = _('Turn On Apache')
 APACHE_RESTART_MESSAGE = _('Restart Apache')
 PHPMYADMIN_MESSAGE = _('PhpMyAdmin')
+APACHE_RESTART_TO_APPLY_CHANGES = _('Apache needs restart to apply changes')
 
 def run(widget):
     plugin = apache_plugin(widget)
@@ -55,8 +56,10 @@ class apache_plugin:
                 self.widget.tray_icon.set_from_file(self.widget.image_green)
 
                 image = gtk.Image()
-                image.set_from_file(self.widget.image_green)
+                #image.set_from_file(self.widget.image_green)
                 self.widget.menu_apache = gtk.ImageMenuItem(APACHE_RUNNING_MESSAGE)
+                image.set_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
+                #window.set_icon(windowIcon.get_pixbuf())
                 self.widget.menu_apache.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_apache)
 
@@ -68,6 +71,8 @@ class apache_plugin:
                 self.widget.menu_apache_restart.connect("activate", self.apache_restart)
                 self.widget.tray_menu.append(self.widget.menu_apache_restart)
 
+                self.add_mods_menu()
+
                 self.widget.tray_menu.append(gtk.SeparatorMenuItem())
                 self.widget.menu_apachephpmyadmin = gtk.ImageMenuItem(PHPMYADMIN_MESSAGE)
                 self.widget.menu_apachephpmyadmin.connect("activate", self.phpmyadmin)
@@ -76,7 +81,8 @@ class apache_plugin:
                 self.widget.tray_menu.append(gtk.SeparatorMenuItem())
 
                 image = gtk.Image()
-                image.set_from_file(self.widget.image_red)
+                #image.set_from_file(self.widget.image_red)
+                image.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
                 self.widget.menu_apache = gtk.ImageMenuItem(APACHE_STOPPED_MESSAGE)
                 self.widget.menu_apache.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_apache)
@@ -85,6 +91,52 @@ class apache_plugin:
                 self.widget.menu_apache_on.connect("activate", self.apache_on)
                 self.widget.tray_menu.append(self.widget.menu_apache_on)
                 self.widget.tray_icon.set_from_file(self.widget.image_red)
+
+                self.add_mods_menu()
+            
+
+    def add_mods_menu(self):
+        imenu = gtk.Menu()
+        mods_menu = gtk.MenuItem("Módulos")
+        mods_menu.set_submenu(imenu)
+
+        for module in self.get_mods_available():
+            item = gtk.CheckMenuItem(module)
+            item.set_active(False)
+            if module in self.get_mods_enabled():
+                item.set_active(True)
+            item.connect("activate", self.on_module_activate)
+            imenu.append(item)
+        self.widget.tray_menu.append(mods_menu)
+
+    def on_module_activate(self, widget):
+        if widget.get_active():
+            os.system("gksudo a2enmod "+widget.get_label())
+            self.notify_apache_need_restart()
+        else:
+            os.system("gksudo a2dismod "+widget.get_label())
+            self.notify_apache_need_restart()
+        self.widget.update_menu()
+
+    def notify_apache_need_restart(self):
+        self.widget.notify(APACHE_RESTART_TO_APPLY_CHANGES)
+
+
+    def get_mods_available(self):
+        mods_available = []
+        for files in os.listdir("/etc/apache2/mods-available/"):
+            if files.endswith(".load"):
+                mods_available.append(os.path.splitext(files)[0])
+        return mods_available
+        
+
+    def get_mods_enabled(self):
+        mods_enabled = []
+        for files in os.listdir("/etc/apache2/mods-enabled/"):
+            if files.endswith(".load"):
+                mods_enabled.append(os.path.splitext(files)[0])
+        return mods_enabled
+
 
     def is_apache_installed(self, *args ):
         output = commands.getoutput("which apache2")
