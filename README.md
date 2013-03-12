@@ -8,23 +8,14 @@ Is an application that allows control services such as Apache and MySQL from the
 <b>Features:</b>
 
 * Written in Python using the GTK 2 libraries.
-
 * Extensible with plugins.
-
 * Apache Plugin:
-
     - Start, stop and restart Apache.
-
     - Enable and disable Apache modules.
-
     - Start Phpmyadmin in the browser.
-
 * Mysql plugin:
-
     - Start, stop and restart Mysql server.
-
 * Postgresql plugin:
-
     - Start, stop and restart Postgresql server.
 
 <b>Plugins:</b>
