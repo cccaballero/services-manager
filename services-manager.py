@@ -21,13 +21,20 @@ import gtk
 import os
 import sys
 import imp
-import gettext
+import spia.internationalizator as internationalizator
+from spia.internationalizator import _
+
+
+
+#import gettext #gettext internationalization
 
 
 APP_NAME = "services-manager"
 
 LOCALE_DIR = os.path.join(sys.path[0], "locale")
-gettext.install(APP_NAME, LOCALE_DIR)
+#gettext.install(APP_NAME, LOCALE_DIR) #gettext internacionalization
+
+internationalizator.load_locale_chains(LOCALE_DIR)
 
 ABAUT_COMMENTS = _("Services Manager, Take control of your services from the desktop.\nInpired in the Apache-Switch tool:\nhttp://apache-switch.webuda.com")
 
@@ -62,6 +69,11 @@ class manager:
         self.update_menu()
         self.tray_icon.connect('popup-menu', self.show_menu, self.tray_menu)
         self.tray_icon.set_tooltip("Services Manager")
+
+    def get_spia(self):
+        (file, filename, data) = imp.find_module("spia")
+        spia_module = imp.load_module("spia", file, filename, data)
+        return spia_module
 
     def set_proc_name(self, newname):
         """Set a system name to the python process"""
@@ -148,7 +160,7 @@ class manager:
         about.set_version("0.2")
         about.set_comments(ABAUT_COMMENTS)
         about.set_license("GPL v3")
-        #about.set_website("")
+        about.set_website("https://github.com/cccaballero/services-manager")
         about.set_authors(["Carlos Cesar Caballero Diaz <ccesar@linuxmail.org>"])
         #about.set_logo(self.pixbu_logo)
         about.run()
@@ -158,3 +170,5 @@ class manager:
 if __name__ == '__main__':
     manager()
     gtk.main()
+
+    

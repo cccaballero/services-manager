@@ -24,19 +24,12 @@ import os
 import commands
 import gtk
 import webbrowser
-import gettext
+#import gettext
 
 APP_NAME = "services-manager-plugin-apache"
 LOCALE_DIR = os.path.join(os.path.dirname(__file__), "locale")
-gettext.install(APP_NAME, LOCALE_DIR)
+#gettext.install(APP_NAME, LOCALE_DIR)
 
-APACHE_RUNNING_MESSAGE = _('Apache is running')
-APACHE_STOPPED_MESSAGE = _('Apache is not running')
-APACHE_TURN_OFF_MESSAGE = _('Turn Off Apache')
-APACHE_TURN_ON_MESSAGE = _('Turn On Apache')
-APACHE_RESTART_MESSAGE = _('Restart Apache')
-PHPMYADMIN_MESSAGE = _('PhpMyAdmin')
-APACHE_RESTART_TO_APPLY_CHANGES = _('Apache needs restart to apply changes')
 
 def run(widget):
     plugin = apache_plugin(widget)
@@ -48,6 +41,19 @@ class apache_plugin:
     def __init__(self, widget):
         self.widget = widget
 
+        spia = widget.get_spia()
+        inte = spia.internationalizator
+        inte.load_locale_chains(LOCALE_DIR)
+        global _
+        _ = inte._
+        self.APACHE_RUNNING_MESSAGE = _('Apache is running')
+        self.APACHE_STOPPED_MESSAGE = _('Apache is not running')
+        self.APACHE_TURN_OFF_MESSAGE = _('Turn Off Apache')
+        self.APACHE_TURN_ON_MESSAGE = _('Turn On Apache')
+        self.APACHE_RESTART_MESSAGE = _('Restart Apache')
+        self.PHPMYADMIN_MESSAGE = _('PhpMyAdmin')
+        self.APACHE_RESTART_TO_APPLY_CHANGES = _('Apache needs restart to apply changes')
+
     def show_apache(self):
         if self.is_apache_installed():
             if self.is_apache_running():
@@ -57,24 +63,24 @@ class apache_plugin:
 
                 image = gtk.Image()
                 #image.set_from_file(self.widget.image_green)
-                self.widget.menu_apache = gtk.ImageMenuItem(APACHE_RUNNING_MESSAGE)
+                self.widget.menu_apache = gtk.ImageMenuItem(self.APACHE_RUNNING_MESSAGE)
                 image.set_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
                 #window.set_icon(windowIcon.get_pixbuf())
                 self.widget.menu_apache.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_apache)
 
-                self.widget.menu_apache_off = gtk.ImageMenuItem(APACHE_TURN_OFF_MESSAGE)
+                self.widget.menu_apache_off = gtk.ImageMenuItem(self.APACHE_TURN_OFF_MESSAGE)
                 self.widget.menu_apache_off.connect("activate", self.apache_off)
                 self.widget.tray_menu.append(self.widget.menu_apache_off)
 
-                self.widget.menu_apache_restart = gtk.ImageMenuItem(APACHE_RESTART_MESSAGE)
+                self.widget.menu_apache_restart = gtk.ImageMenuItem(self.APACHE_RESTART_MESSAGE)
                 self.widget.menu_apache_restart.connect("activate", self.apache_restart)
                 self.widget.tray_menu.append(self.widget.menu_apache_restart)
 
                 self.add_mods_menu()
 
                 self.widget.tray_menu.append(gtk.SeparatorMenuItem())
-                self.widget.menu_apachephpmyadmin = gtk.ImageMenuItem(PHPMYADMIN_MESSAGE)
+                self.widget.menu_apachephpmyadmin = gtk.ImageMenuItem(self.PHPMYADMIN_MESSAGE)
                 self.widget.menu_apachephpmyadmin.connect("activate", self.phpmyadmin)
                 self.widget.tray_menu.append(self.widget.menu_apachephpmyadmin)
             else:
@@ -83,11 +89,11 @@ class apache_plugin:
                 image = gtk.Image()
                 #image.set_from_file(self.widget.image_red)
                 image.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
-                self.widget.menu_apache = gtk.ImageMenuItem(APACHE_STOPPED_MESSAGE)
+                self.widget.menu_apache = gtk.ImageMenuItem(self.APACHE_STOPPED_MESSAGE)
                 self.widget.menu_apache.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_apache)
                 
-                self.widget.menu_apache_on = gtk.ImageMenuItem(APACHE_TURN_ON_MESSAGE)
+                self.widget.menu_apache_on = gtk.ImageMenuItem(self.APACHE_TURN_ON_MESSAGE)
                 self.widget.menu_apache_on.connect("activate", self.apache_on)
                 self.widget.tray_menu.append(self.widget.menu_apache_on)
                 self.widget.tray_icon.set_from_file(self.widget.image_red)
@@ -119,7 +125,7 @@ class apache_plugin:
         self.widget.update_menu()
 
     def notify_apache_need_restart(self):
-        self.widget.notify(APACHE_RESTART_TO_APPLY_CHANGES)
+        self.widget.notify(self.APACHE_RESTART_TO_APPLY_CHANGES)
 
 
     def get_mods_available(self):
@@ -185,8 +191,8 @@ class apache_plugin:
         webbrowser.open(url,new=new)
 
     def notify_apache_running(self):
-        self.widget.notify(APACHE_RUNNING_MESSAGE)
+        self.widget.notify(self.APACHE_RUNNING_MESSAGE)
 
     def notify_apache_stopped(self):
-        self.widget.notify(APACHE_STOPPED_MESSAGE)
+        self.widget.notify(self.APACHE_STOPPED_MESSAGE)
 

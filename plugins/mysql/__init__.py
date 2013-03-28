@@ -23,17 +23,11 @@ __plugin_version__ = "0.2"
 import os
 import commands
 import gtk
-import gettext
+#import gettext
 
 APP_NAME = "services-manager-plugin-mysql"
 LOCALE_DIR = os.path.join(os.path.dirname(__file__), "locale")
-gettext.install(APP_NAME, LOCALE_DIR)
-
-MYSQL_RUNNING_MESSAGE = _('Mysql is running')
-MYSQL_STOPPED_MESSAGE = _('Mysql is not running')
-MYSQL_TURN_OFF_MESSAGE = _('Turn Off Mysql')
-MYSQL_TURN_ON_MESSAGE = _('Turn On Mysql')
-MYSQL_RESTART_MESSAGE = _('Restart Mysql')
+#gettext.install(APP_NAME, LOCALE_DIR)
 
 def run(widget):
     plugin = mysql_plugin(widget)
@@ -45,6 +39,16 @@ class mysql_plugin:
     def __init__(self, widget):
         self.widget = widget
 
+        spia = widget.get_spia()
+        inte = spia.internationalizator
+        inte.load_locale_chains(LOCALE_DIR)
+        _ = inte._
+        self.MYSQL_RUNNING_MESSAGE = _('Mysql is running')
+        self.MYSQL_STOPPED_MESSAGE = _('Mysql is not running')
+        self.MYSQL_TURN_OFF_MESSAGE = _('Turn Off Mysql')
+        self.MYSQL_TURN_ON_MESSAGE = _('Turn On Mysql')
+        self.MYSQL_RESTART_MESSAGE = _('Restart Mysql')
+
     def show_mysql(self):
         if self.is_mysql_installed():
             if self.is_mysql_running():
@@ -53,15 +57,15 @@ class mysql_plugin:
                 image = gtk.Image()
                 #image.set_from_file(self.widget.image_green)
                 image.set_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
-                self.widget.menu_mysql = gtk.ImageMenuItem(MYSQL_RUNNING_MESSAGE)
+                self.widget.menu_mysql = gtk.ImageMenuItem(self.MYSQL_RUNNING_MESSAGE)
                 self.widget.menu_mysql.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_mysql)
 
-                self.widget.menu_mysql_off = gtk.ImageMenuItem(MYSQL_TURN_OFF_MESSAGE)
+                self.widget.menu_mysql_off = gtk.ImageMenuItem(self.MYSQL_TURN_OFF_MESSAGE)
                 self.widget.menu_mysql_off.connect("activate", self.mysql_off)
                 self.widget.tray_menu.append(self.widget.menu_mysql_off)
 
-                self.widget.menu_mysql_restart = gtk.ImageMenuItem(MYSQL_RESTART_MESSAGE)
+                self.widget.menu_mysql_restart = gtk.ImageMenuItem(self.MYSQL_RESTART_MESSAGE)
                 self.widget.menu_mysql_restart.connect("activate", self.mysql_restart)
                 self.widget.tray_menu.append(self.widget.menu_mysql_restart)
             else:
@@ -70,11 +74,11 @@ class mysql_plugin:
                 image = gtk.Image()
                 #image.set_from_file(self.widget.image_red)
                 image.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
-                self.widget.menu_mysql = gtk.ImageMenuItem(MYSQL_STOPPED_MESSAGE)
+                self.widget.menu_mysql = gtk.ImageMenuItem(self.MYSQL_STOPPED_MESSAGE)
                 self.widget.menu_mysql.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_mysql)
 
-                self.widget.menu_mysql_on = gtk.ImageMenuItem(MYSQL_TURN_ON_MESSAGE)
+                self.widget.menu_mysql_on = gtk.ImageMenuItem(self.MYSQL_TURN_ON_MESSAGE)
                 self.widget.menu_mysql_on.connect("activate", self.mysql_on)
                 self.widget.tray_menu.append(self.widget.menu_mysql_on)
 
@@ -119,7 +123,7 @@ class mysql_plugin:
             self.notify_mysql_stopped()
 
     def notify_mysql_running(self):
-        self.widget.notify(MYSQL_RUNNING_MESSAGE)
+        self.widget.notify(self.MYSQL_RUNNING_MESSAGE)
 
     def notify_mysql_stopped(self):
-        self.widget.notify(MYSQL_STOPPED_MESSAGE)
+        self.widget.notify(self.MYSQL_STOPPED_MESSAGE)

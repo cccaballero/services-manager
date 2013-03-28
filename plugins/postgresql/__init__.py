@@ -29,11 +29,7 @@ APP_NAME = "services-manager-plugin-postgresql"
 LOCALE_DIR = os.path.join(os.path.dirname(__file__), "locale")
 gettext.install(APP_NAME, LOCALE_DIR)
 
-POSTGRESQL_RUNNING_MESSAGE = _('Postgresql is running')
-POSTGRESQL_STOPPED_MESSAGE = _('Postgresql is not running')
-POSTGRESQL_TURN_OFF_MESSAGE = _('Turn Off Postgresql')
-POSTGRESQL_TURN_ON_MESSAGE = _('Turn On Postgresql')
-POSTGRESQL_RESTART_MESSAGE = _('Restart Postgresql')
+
 
 def run(widget):
     plugin = postgresql_plugin(widget)
@@ -45,6 +41,16 @@ class postgresql_plugin:
     def __init__(self, widget):
         self.widget = widget
 
+        spia = widget.get_spia()
+        inte = spia.internationalizator
+        inte.load_locale_chains(LOCALE_DIR)
+        _ = inte._
+        self.POSTGRESQL_RUNNING_MESSAGE = _('Postgresql is running')
+        self.POSTGRESQL_STOPPED_MESSAGE = _('Postgresql is not running')
+        self.POSTGRESQL_TURN_OFF_MESSAGE = _('Turn Off Postgresql')
+        self.POSTGRESQL_TURN_ON_MESSAGE = _('Turn On Postgresql')
+        self.POSTGRESQL_RESTART_MESSAGE = _('Restart Postgresql')
+
     def show_postgresql(self):
         if self.is_postgresql_installed():
             if self.is_postgresql_running():
@@ -53,15 +59,15 @@ class postgresql_plugin:
                 image = gtk.Image()
                 #image.set_from_file(self.widget.image_green)
                 image.set_from_stock(gtk.STOCK_EXECUTE, gtk.ICON_SIZE_MENU)
-                self.widget.menu_postgresql = gtk.ImageMenuItem(POSTGRESQL_RUNNING_MESSAGE)
+                self.widget.menu_postgresql = gtk.ImageMenuItem(self.POSTGRESQL_RUNNING_MESSAGE)
                 self.widget.menu_postgresql.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_postgresql)
 
-                self.widget.menu_postgresql_off = gtk.ImageMenuItem(POSTGRESQL_TURN_OFF_MESSAGE)
+                self.widget.menu_postgresql_off = gtk.ImageMenuItem(self.POSTGRESQL_TURN_OFF_MESSAGE)
                 self.widget.menu_postgresql_off.connect("activate", self.postgresql_off)
                 self.widget.tray_menu.append(self.widget.menu_postgresql_off)
 
-                self.widget.menu_postgresql_restart = gtk.ImageMenuItem(POSTGRESQL_RESTART_MESSAGE)
+                self.widget.menu_postgresql_restart = gtk.ImageMenuItem(self.POSTGRESQL_RESTART_MESSAGE)
                 self.widget.menu_postgresql_restart.connect("activate", self.postgresql_restart)
                 self.widget.tray_menu.append(self.widget.menu_postgresql_restart)
             else:
@@ -70,11 +76,11 @@ class postgresql_plugin:
                 image = gtk.Image()
                 #image.set_from_file(self.widget.image_red)
                 image.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU)
-                self.widget.menu_postgresql = gtk.ImageMenuItem(POSTGRESQL_STOPPED_MESSAGE)
+                self.widget.menu_postgresql = gtk.ImageMenuItem(self.POSTGRESQL_STOPPED_MESSAGE)
                 self.widget.menu_postgresql.set_image(image)
                 self.widget.tray_menu.append(self.widget.menu_postgresql)
 
-                self.widget.menu_postgresql_on = gtk.ImageMenuItem(POSTGRESQL_TURN_ON_MESSAGE)
+                self.widget.menu_postgresql_on = gtk.ImageMenuItem(self.POSTGRESQL_TURN_ON_MESSAGE)
                 self.widget.menu_postgresql_on.connect("activate", self.postgresql_on)
                 self.widget.tray_menu.append(self.widget.menu_postgresql_on)
 
@@ -116,7 +122,7 @@ class postgresql_plugin:
             self.notify_postgresql_stopped()
 
     def notify_postgresql_running(self):
-        self.widget.notify(POSTGRESQL_RUNNING_MESSAGE)
+        self.widget.notify(self.POSTGRESQL_RUNNING_MESSAGE)
 
     def notify_postgresql_stopped(self):
-        self.widget.notify(POSTGRESQL_STOPPED_MESSAGE)
+        self.widget.notify(self.POSTGRESQL_STOPPED_MESSAGE)
